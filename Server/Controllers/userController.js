@@ -1,13 +1,17 @@
 import Phonebook from "../Models/PhoneBook.js";
 import User from "../Models/User.js";
 import { createJWT } from "../Utils/index.js";
+import { OAuth2Client } from "google-auth-library";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export const registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
     const userExist = await User.findOne({ email });
 
-    if (userExist) {
+    if (userExist && userExist.authProvider === "LOCAL") {
       return res
         .status(400)
         .json({ status: false, message: "User already exists" });
@@ -17,6 +21,7 @@ export const registerUser = async (req, res) => {
       name,
       email,
       password,
+      authProvider: "LOCAL",
     });
     if (user) {
       //create a phonebook instance
@@ -52,6 +57,10 @@ export const registerUser = async (req, res) => {
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({ status: false, message: "Missing fields" });
+    }
+
     const user = await User.findOne({ email });
     if (!user) {
       return res
@@ -60,15 +69,99 @@ export const loginUser = async (req, res) => {
     }
 
     const isMatch = await user.matchPassword(password);
-    if (user && isMatch) {
-      createJWT(res, user._id);
-      return res
-        .status(200)
-        .json({ status: true, message: "User logged in successfully" });
+    if (user && isMatch && user.authProvider === "LOCAL") {
+      const token = createJWT(res, user._id);
+      return res.status(200).json({
+        status: true,
+        message: "User logged in successfully",
+        user,
+        token: token,
+      });
     } else {
       return res
         .status(401)
         .json({ status: true, message: "Invalid email or password. " });
+    }
+  } catch (error) {
+    return res.status(400).json({ status: false, message: error.message });
+  }
+};
+
+export const OAuthSignUp = async (req, res) => {
+  const client = new OAuth2Client("");
+  try {
+    const { token } = req.body;
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: "",
+    });
+    const payload = ticket.getPayload();
+
+    let userExist = await User.findOne({ email: payload.email });
+    if (userExist) {
+      return res
+        .status(400)
+        .json({ status: false, message: "User already exists" });
+    }
+    const user = await User.create({
+      name: payload.name,
+      email: payload.email,
+      password: "",
+      authProvider: "GOOGLE",
+    });
+    if (user) {
+      //create a phonebook instance
+      const phonebook = await Phonebook.create({
+        user: user._id,
+        contacts: [],
+      });
+
+      //assign phonebook id
+      user.phonebook = phonebook._id;
+      await user.save();
+
+      //generate token
+      const token = createJWT(res, user._id);
+      user.password = undefined;
+
+      return res.status(201).json({
+        status: true,
+        message: "User registered successfully",
+        user,
+        token: token,
+      });
+    }
+  } catch (error) {
+    console.error("Google auth error", error.message);
+    return res.status(400).json({ status: false, message: error.message });
+  }
+};
+
+export const OAuthLogin = async (req, res) => {
+  const client = new OAuth2Client("");
+  try {
+    const { token } = req.body;
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: "",
+    });
+    const payload = ticket.getPayload();
+
+    const user = await User.findOne({ email: payload.email });
+    if (!user) {
+      return res
+        .status(401)
+        .json({ status: false, message: "User does not exist" });
+    }
+
+    if (user && user.authProvider === "GOOGLE") {
+      const token = createJWT(res, user._id);
+      return res.status(200).json({
+        status: true,
+        message: "User logged in successfully",
+        user,
+        token: token,
+      });
     }
   } catch (error) {
     return res.status(400).json({ status: false, message: error.message });

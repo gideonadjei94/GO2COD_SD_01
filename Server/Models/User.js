@@ -7,6 +7,12 @@ const userSchema = new Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     phonebook: { type: Schema.Types.ObjectId, ref: "Phonebook" },
+    authProvider: {
+      type: String,
+      enum: ["LOCAL", "GOOGLE"],
+      required: true,
+      default: "LOCAL",
+    },
   },
   {
     timestamps: true,
