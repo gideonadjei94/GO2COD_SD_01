@@ -6,7 +6,7 @@ const userSchema = new Schema(
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    phonebook: [{ type: Schema.Types.ObjectId, ref: "Phonebook" }],
+    phonebook: { type: Schema.Types.ObjectId, ref: "Phonebook" },
   },
   {
     timestamps: true,
@@ -21,7 +21,7 @@ userSchema.pre("save", async function (next) {
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-userSchema.method.matchPassword = async function (enteredPassword) {
+userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
