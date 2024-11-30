@@ -3,12 +3,13 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { cn } from "@/lib/utils";
 import { GoogleAuthButton } from "./GoogleAuthButton";
+import { NavLink } from "react-router-dom";
 
 export const AuthForm = () => {
   const [authType, setAuthType] = useState("login");
   return (
-    <div className="bg-white p-4 shadow-md rounded-md flex flex-col items-center w-full ">
-      <h1 className="text-3xl text-center font-semibold text-primary">
+    <div className="bg-white p-4 shadow-xl rounded-md flex flex-col items-center w-full">
+      <h1 className="text-3xl text-center font-semibold text-primary mt-6">
         {authType === "login" ? "Welcome back!" : "Hi There!"}
       </h1>
       <p className="text-muted-foreground mb-2">
@@ -20,7 +21,7 @@ export const AuthForm = () => {
       <form className="w-full px-4 mt-2 my-2">
         <div
           className={cn(
-            "group relative mb-3",
+            "group relative mb-4",
             authType === "login" ? "hidden" : "block"
           )}
         >
@@ -30,7 +31,7 @@ export const AuthForm = () => {
           >
             Name
           </label>
-          <Input id="input-31" className="h-12 w-full" type="text" />
+          <Input className="h-12 w-full" type="text" />
         </div>
 
         <div className="group relative">
@@ -40,22 +41,24 @@ export const AuthForm = () => {
           >
             Email
           </label>
-          <Input id="input-31" className="h-12 w-full" type="email" />
+          <Input className="h-12 w-full" type="email" />
         </div>
 
-        <div className="group relative mt-3">
+        <div className="group relative mt-4">
           <label
             htmlFor="password"
             className="absolute start-1 top-0 z-10 block -translate-y-1/2 bg-background px-2 text-sm  text-medium group-has-[:disabled]:opacity-50"
           >
             Password
           </label>
-          <Input id="input-31" className="h-12 w-full" type="password" />
+          <Input className="h-12 w-full" type="password" />
         </div>
 
-        <Button className="w-full mt-3 py-6 text-md">Continue</Button>
+        <NavLink to={"/dashboard"}>
+          <Button className="w-full mt-3 py-6 text-md">Continue</Button>
+        </NavLink>
 
-        <p className="text-sm text-center mt-3">
+        <p className="text-sm text-center mt-4">
           {authType === "login"
             ? " Don't have an account?"
             : "Already have an account?"}{" "}
