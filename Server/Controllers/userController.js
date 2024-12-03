@@ -98,7 +98,7 @@ export const OAuthSignUp = async (req, res) => {
     const payload = ticket.getPayload();
 
     let userExist = await User.findOne({ email: payload.email });
-    if (userExist) {
+    if (userExist && userExist.authProvider === "GOOGLE") {
       return res
         .status(400)
         .json({ status: false, message: "User already exists" });
