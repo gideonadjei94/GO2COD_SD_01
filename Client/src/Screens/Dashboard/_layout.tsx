@@ -16,20 +16,21 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/Components/ui/sheet";
-import { LogOut, MenuIcon, Settings, User2 } from "lucide-react";
+import { LogOut, MenuIcon, PhoneCall, Settings, User2 } from "lucide-react";
 import { Link, Outlet } from "react-router-dom";
 
 export default function Dashboard() {
   return (
     <>
-      <div className="min-h-screen bg-muted/40  w-full grid md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+      <div className="min-h-screen w-full grid md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
         {/* SIDENAV */}
-        <div className="hidden md:block border-r bg-white shadow">
+        <div className="hidden md:block border-r sticky top-0 h-screen z-10">
           <div className="flex h-full max-h-screen flex-col gap-2">
-            <div className="flex  items-center border-b px-4 lg:h-[80px] lg:px-6">
+            <div className="flex  items-center  px-4 lg:h-[80px] lg:px-6">
               <Link to={""} className="flex items-center gap-2">
                 {/* <img src={logo} alt="" className="h-10 w-auto mr-2" /> */}
-                <p className="text-xl font-semibold text-primary">
+                <PhoneCall className="text-slate-900 mr-1" />
+                <p className="text-xl font-semibold text-slate-900">
                   Contacts Box
                 </p>
               </Link>
@@ -46,10 +47,10 @@ export default function Dashboard() {
 
         <div className="flex flex-col">
           {/* HEADER */}
-          <div className="h-20  flex items-center justify-between bg-white shadow px-10">
+          <div className="h-20  flex items-center justify-between  px-10 sticky top-0 z-10 backdrop-blur-lg">
             <Input
-              placeholder="Search"
-              className="border-none bg-primary/10 w-72 hidden md:block"
+              placeholder="Search Contact"
+              className="border  w-72 hidden md:block"
             />
             <div className="flex md:hidden">
               <Sheet>
@@ -57,7 +58,9 @@ export default function Dashboard() {
                   <MenuIcon />
                 </SheetTrigger>
                 <SheetContent side="left">
-                  <p className="text-lg font-semibold">Contacts Box</p>
+                  <p className="text-lg font-semibold text-slate-900">
+                    Contacts Box
+                  </p>
                   <SheetClose className="mt-5 w-full">
                     <DashboardLinks />
                   </SheetClose>
@@ -109,7 +112,7 @@ export default function Dashboard() {
           </div>
 
           {/* MAIN OUTLET */}
-          <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+          <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 overflow-auto">
             <Outlet />
           </main>
         </div>
