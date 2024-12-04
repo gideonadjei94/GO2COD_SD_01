@@ -12,6 +12,7 @@ import {
 } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
 import {
+  ArrowUpDown,
   Copy,
   Edit2,
   Mail,
@@ -31,13 +32,17 @@ export type Contact = {
 export const contacts: ColumnDef<Contact>[] = [
   {
     accessorKey: "name",
-    header: () => (
-      <div className="">
-        {" "}
-        <Checkbox className="mr-2" />
-        Name
-      </div>
-    ),
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
       const name = row.getValue("name");
       const formattedName = getInitials(`${name}`);
@@ -92,8 +97,19 @@ export const contacts: ColumnDef<Contact>[] = [
   },
   {
     accessorKey: "email",
-    header: "Email",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Email
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   },
+
   {
     id: "actions",
     enableHiding: false,
