@@ -6,13 +6,16 @@ const userSchema = new Schema(
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    phonebook: { type: Schema.Types.ObjectId, ref: "Phonebook" },
+    phonebook_id: { type: Schema.Types.ObjectId, ref: "Phonebook" },
     authProvider: {
       type: String,
       enum: ["LOCAL", "GOOGLE"],
       required: true,
       default: "LOCAL",
     },
+    favorites_id: { type: Schema.Types.ObjectId, ref: "Favorites" },
+    trash_id: { type: Schema.Types.ObjectId, ref: "Trash" },
+    groups: [{ type: Schema.Types.ObjectId, ref: "Group" }],
   },
   {
     timestamps: true,

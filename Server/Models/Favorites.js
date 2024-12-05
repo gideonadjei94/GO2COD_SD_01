@@ -1,8 +1,15 @@
 import mongoose, { Schema } from "mongoose";
 
+const contactSchema = new Schema({
+  name: { type: String, required: true },
+  number: { type: String, required: true },
+  email: { type: String, required: true },
+});
+
 const favoritesSchema = new Schema(
   {
-    contacts: [{ type: Schema.Types.ObjectId, ref: "contact" }],
+    user: { type: Schema.Types.ObjectId, ref: "User" },
+    contacts: [contactSchema],
   },
   {
     timestamps: true,

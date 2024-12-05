@@ -1,5 +1,7 @@
 import Phonebook from "../Models/PhoneBook.js";
 import User from "../Models/User.js";
+import Favorites from "../Models/Favorites.js";
+import Trash from "../Models/Trash.js";
 import { createJWT } from "../Utils/index.js";
 import { OAuth2Client } from "google-auth-library";
 import dotenv from "dotenv";
@@ -30,8 +32,20 @@ export const registerUser = async (req, res) => {
         contacts: [],
       });
 
+      const favorite = await Favorites.create({
+        user: user._id,
+        contacts: [],
+      });
+
+      const trash = await Trash.create({
+        user: user._id,
+        contacts: [],
+      });
+
       //assign phonebook id
-      user.phonebook = phonebook._id;
+      user.phonebook_id = phonebook._id;
+      user.favorites_id = favorite._id;
+      user.trash_id = trash._id;
       await user.save();
 
       //generate token
@@ -71,6 +85,7 @@ export const loginUser = async (req, res) => {
     const isMatch = await user.matchPassword(password);
     if (user && isMatch && user.authProvider === "LOCAL") {
       const token = createJWT(res, user._id);
+      user.password = undefined;
       return res.status(200).json({
         status: true,
         message: "User logged in successfully",
