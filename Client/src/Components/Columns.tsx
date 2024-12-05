@@ -17,7 +17,6 @@ import {
   Edit2,
   Mail,
   MoreHorizontal,
-  Phone,
   Plus,
   Trash2,
 } from "lucide-react";

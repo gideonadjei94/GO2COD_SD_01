@@ -1,6 +1,17 @@
 import { Contact, contacts } from "@/Components/Columns";
 import { DataTable } from "@/Components/DataTable";
 import { Button } from "@/Components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/Components/ui/dialog";
+import { Input } from "@/Components/ui/input";
+import { Label } from "@/Components/ui/label";
 import { Plus } from "lucide-react";
 
 export default function Contacts() {
@@ -8,10 +19,62 @@ export default function Contacts() {
     <div className="">
       <div className="w-full flex items-center justify-between">
         <h1 className="text-2xl font-semibold text-slate-900">Contacts </h1>
-        <Button className="bg-slate-900">
-          <Plus />
-          Add Contact
-        </Button>
+
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className="bg-slate-900" type="button">
+              <Plus />
+              Add Contact
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle className="text-slate-900">Add Contact</DialogTitle>
+              <DialogDescription>
+                Add a new contact to your Phonebook.
+              </DialogDescription>
+            </DialogHeader>
+            <form className="">
+              <div className="">
+                <Label htmlFor="name" className="text-right">
+                  Name
+                </Label>
+                <Input id="name" placeholder="John Doe" type="text" />
+              </div>
+              <div className="">
+                <Label htmlFor="number" className="text-right">
+                  Number
+                </Label>
+                <Input
+                  id="number"
+                  placeholder="+233/(0)-241571751 "
+                  type="number"
+                />
+              </div>
+              <div className="">
+                <Label htmlFor="email" className="text-right">
+                  Email
+                </Label>
+                <Input
+                  id="email"
+                  placeholder="johndoe@example.com"
+                  type="email"
+                />
+              </div>
+            </form>
+            <DialogFooter>
+              <div className="flex justify-between  w-full">
+                <Button type="button" variant="destructive">
+                  Cancel
+                </Button>
+
+                <Button type="submit" className="bg-slate-900 text-white px-7">
+                  Done
+                </Button>
+              </div>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
       <div className="container mx-auto py-14 ">
         <DataTable columns={contacts} data={data} />

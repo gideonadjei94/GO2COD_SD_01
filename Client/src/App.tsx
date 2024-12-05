@@ -11,7 +11,7 @@ function App() {
   const location = useLocation();
 
   const routeTitles: { [key: string]: string } = {
-    "/": "Contacts Box - Auth",
+    "/": "Auth | Contacts Box",
     "/dashboard": "Contacts",
     "/dashboard/groups": "Groups",
     "/dashboard/starred": "Favorites",
