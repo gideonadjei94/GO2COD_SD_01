@@ -1,7 +1,7 @@
 import Phonebook from "../Models/PhoneBook.js";
 
 export const getAllContacts = async (req, res) => {
-  const { phonebookId } = req.param;
+  const { phonebookId } = req.params;
 
   try {
     const phonebook = await Phonebook.findById(phonebookId);
@@ -19,7 +19,7 @@ export const getAllContacts = async (req, res) => {
 };
 export const addContact = async (req, res) => {
   try {
-    const { phonebookId } = req.param;
+    const { phonebookId } = req.params;
     const { name, number, email } = req.body;
 
     if (!name || !number || !email) {
