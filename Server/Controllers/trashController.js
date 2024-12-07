@@ -4,7 +4,7 @@ import Phonebook from "../Models/PhoneBook.js";
 export const getTrash = async (req, res) => {
   const { trashId } = req.params;
   try {
-    const trash = await Trash.findOne({ _id: trashId });
+    const trash = await Trash.findById(trashId);
     if (!trash) {
       return res
         .status(404)
@@ -22,8 +22,8 @@ export const getTrash = async (req, res) => {
 export const addContact = async (req, res) => {
   const { trashId, phonebookId } = req.params;
   const { contact } = req.body;
-  const trash = await Trash.findOne({ _id: trashId });
-  const phonebook = await Phonebook.findOne({ _id: phonebookId });
+  const trash = await Trash.findById(trashId);
+  const phonebook = await Phonebook.findById(phonebookId);
   if (!trash) {
     return res.status(404).json({ status: false, message: "Trash not found" });
   }
@@ -45,8 +45,8 @@ export const removeContact = async (req, res) => {
   const { trashId, contactId, phonebookId } = req.params;
 
   try {
-    const trash = await Trash.findOne({ _id: trashId });
-    const phonebook = await Phonebook.findOne({ _id: phonebookId });
+    const trash = await Trash.findById(trashId);
+    const phonebook = await Phonebook.findById(phonebookId);
     if (!trash) {
       if (!trash) {
         return res
@@ -81,7 +81,7 @@ export const deleteContact = async (req, res) => {
   const { trashId, contactId } = req.params;
 
   try {
-    const trash = await Trash.findOne({ _id: trashId });
+    const trash = await Trash.findById(trashId);
     if (!trash) {
       return res
         .status(404)

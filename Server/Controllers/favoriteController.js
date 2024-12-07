@@ -4,7 +4,7 @@ export const addToFavorite = async (req, res) => {
   const { favoritesId } = req.params;
   const { contact } = req.body;
   try {
-    const favorite = await Favorites.findOne({ _id: favoritesId });
+    const favorite = await Favorites.findById(favoritesId);
     if (!favorite) {
       return res
         .status(404)
@@ -37,7 +37,7 @@ export const addToFavorite = async (req, res) => {
 export const removeFromFavorite = async (req, res) => {
   const { favoriteId, contactId } = req.params;
   try {
-    const favorites = await Favorites.findOne({ _id: favoriteId });
+    const favorites = await Favorites.findById(favoriteId);
     if (!favorites) {
       return res
         .status(404)
@@ -68,7 +68,7 @@ export const removeFromFavorite = async (req, res) => {
 export const getFavorite = async (req, res) => {
   const { favoritesId } = req.params;
   try {
-    const favorite = await Favorites.findOne({ _id: favoritesId });
+    const favorite = await Favorites.findById(favoritesId);
     if (!favorite) {
       return res
         .status(404)
