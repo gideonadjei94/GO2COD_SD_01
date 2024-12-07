@@ -4,7 +4,7 @@ export const getAllContacts = async (req, res) => {
   const { phonebookId } = req.param;
 
   try {
-    const phonebook = await Phonebook.findOne({ phonebookId });
+    const phonebook = await Phonebook.findOne({ _id: phonebookId });
     if (!phonebook) {
       return res
         .status(404)
@@ -33,7 +33,7 @@ export const addContact = async (req, res) => {
       email,
     };
 
-    const phonebook = await Phonebook.findOne({ phonebookId });
+    const phonebook = await Phonebook.findOne({ _id: phonebookId });
     if (!phonebook) {
       return res
         .status(404)
@@ -58,7 +58,7 @@ export const updateContact = async (req, res) => {
     const { phonebookId, contactId } = req.params;
     const { name, number, email } = req.body;
 
-    const phonebook = await Phonebook.findById(phonebookId);
+    const phonebook = await Phonebook.findOne({ _id: phonebookId });
     if (!phonebook) {
       return res
         .status(404)
@@ -119,7 +119,7 @@ export const deleteContact = async (req, res) => {
   try {
     const { contactId, phonebookId } = req.params;
 
-    const phonebook = await Phonebook.findById(phonebookId);
+    const phonebook = await Phonebook.findOne({ _id: phonebookId });
     if (!phonebook) {
       return res
         .status(404)

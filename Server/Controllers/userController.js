@@ -2,6 +2,7 @@ import Phonebook from "../Models/PhoneBook.js";
 import User from "../Models/User.js";
 import Favorites from "../Models/Favorites.js";
 import Trash from "../Models/Trash.js";
+import Groups from "../Models/Groups.js";
 import { createJWT } from "../Utils/index.js";
 import { OAuth2Client } from "google-auth-library";
 import dotenv from "dotenv";
@@ -42,10 +43,16 @@ export const registerUser = async (req, res) => {
         contacts: [],
       });
 
+      const groups = await Groups.create({
+        user: user._id,
+        groups: [],
+      });
+
       //assign phonebook id
       user.phonebook_id = phonebook._id;
       user.favorites_id = favorite._id;
       user.trash_id = trash._id;
+      user.groups_id = groups._id;
       await user.save();
 
       //generate token

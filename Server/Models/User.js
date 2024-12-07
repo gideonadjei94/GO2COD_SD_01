@@ -15,7 +15,7 @@ const userSchema = new Schema(
     },
     favorites_id: { type: Schema.Types.ObjectId, ref: "Favorites" },
     trash_id: { type: Schema.Types.ObjectId, ref: "Trash" },
-    groups: [{ type: Schema.Types.ObjectId, ref: "Group" }],
+    groups_id: [{ type: Schema.Types.ObjectId, ref: "Group" }],
   },
   {
     timestamps: true,

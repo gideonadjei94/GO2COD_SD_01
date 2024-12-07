@@ -4,7 +4,7 @@ export const addToFavorite = async (req, res) => {
   const { favoritesId } = req.params;
   const { contact } = req.body;
   try {
-    const favorite = await Favorites.findById(favoritesId);
+    const favorite = await Favorites.findOne({ _id: favoritesId });
     if (!favorite) {
       return res
         .status(404)
@@ -17,11 +17,11 @@ export const addToFavorite = async (req, res) => {
     if (contactExist) {
       return res.status(400).json({
         status: false,
-        message: "Contact Already exists",
+        message: "Contact Already exists in favorite",
         contact,
       });
     }
-    console.log(favorite);
+
     favorite.contacts.push(contact);
     await favorite.save();
     return res.status(200).json({
@@ -37,7 +37,7 @@ export const addToFavorite = async (req, res) => {
 export const removeFromFavorite = async (req, res) => {
   const { favoriteId, contactId } = req.params;
   try {
-    const favorites = await Favorites.findById(favoriteId);
+    const favorites = await Favorites.findOne({ _id: favoriteId });
     if (!favorites) {
       return res
         .status(404)
@@ -68,7 +68,7 @@ export const removeFromFavorite = async (req, res) => {
 export const getFavorite = async (req, res) => {
   const { favoritesId } = req.params;
   try {
-    const favorite = await Favorites.findById(favoritesId);
+    const favorite = await Favorites.findOne({ _id: favoritesId });
     if (!favorite) {
       return res
         .status(404)

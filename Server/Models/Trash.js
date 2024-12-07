@@ -9,7 +9,7 @@ const contactSchema = new Schema({
 const trashSchema = new Schema(
   {
     user: { type: Schema.Types.ObjectId, ref: "User" },
-    contact: [contactSchema],
+    contacts: [contactSchema],
   },
   {
     timestamps: true,

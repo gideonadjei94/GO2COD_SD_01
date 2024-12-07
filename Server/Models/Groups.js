@@ -6,15 +6,19 @@ const contactSchema = new Schema({
   email: { type: String, required: true },
 });
 
-const groupSchema = new Schema(
+const groupSchema = new Schema({
+  name: { type: String, required: true },
+  contacts: [contactSchema],
+});
+const groupsSchema = new Schema(
   {
     user: { type: Schema.Types.ObjectId, ref: "User" },
-    contacts: [contactSchema],
+    groups: [groupSchema],
   },
   {
     timestamps: true,
   }
 );
 
-const Group = mongoose.model("Group", groupSchema);
-export default Group;
+const Groups = mongoose.model("Groups", groupsSchema);
+export default Groups;
