@@ -11,14 +11,14 @@ export const addToFavorite = async (req, res) => {
         .json({ status: false, message: "Favorite not found" });
     }
 
-    const contactExist = favorite.contacts.filter(
+    const contactExist = favorite.contacts.some(
       (c) => c.number === contact.number
     );
     if (contactExist) {
       return res.status(400).json({
         status: false,
         message: "Contact Already exists in favorite",
-        contact,
+        contactExist,
       });
     }
 
