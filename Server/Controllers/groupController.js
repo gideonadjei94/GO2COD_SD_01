@@ -63,6 +63,16 @@ export const addContactToGroup = async (req, res) => {
       });
     }
 
+    const contactExists = group.contacts.some(
+      (c) => c.number === contact.number
+    );
+    if (!contactExists) {
+      return res.status(400).json({
+        status: false,
+        message: "Contact already exists in the group",
+        group,
+      });
+    }
     group.contacts.push(contact);
     await userGroups.save();
 
