@@ -20,12 +20,25 @@ export const getTrash = async (req, res) => {
 };
 
 export const addContact = async (req, res) => {
-  const { trashId, phonebookId } = req.params;
-  const { contact } = req.body;
+  const { trashId, phonebookId, contactId } = req.params;
   const trash = await Trash.findById(trashId);
   const phonebook = await Phonebook.findById(phonebookId);
   if (!trash) {
     return res.status(404).json({ status: false, message: "Trash not found" });
+  }
+  if (!phonebook) {
+    return res
+      .status(404)
+      .json({ status: false, message: "User phonebook  not found" });
+  }
+
+  const contact = phonebook.contacts.filter(
+    (contact) => contact._id.toString() === contactId
+  );
+  if (!contact) {
+    return res
+      .status(404)
+      .json({ status: false, message: "Contact  not found" });
   }
 
   trash.contacts.push(contact);

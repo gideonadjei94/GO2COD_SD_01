@@ -9,7 +9,11 @@ import { protectRoute } from "../Middlewares/authMiddleware.js";
 const router = express.Router();
 
 router.get("/all/:favoritesId", protectRoute, getFavorite);
-router.post("/add/:favoritesId", protectRoute, addToFavorite);
+router.post(
+  "/add/:favoritesId:contactId/:phonebookId",
+  protectRoute,
+  addToFavorite
+);
 router.delete(
   "/remove/:favoriteId/:contactId",
   protectRoute,

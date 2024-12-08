@@ -1,5 +1,5 @@
 import Groups from "../Models/Groups.js";
-import User from "../Models/User.js";
+import Phonebook from "../Models/PhoneBook.js";
 
 export const createGroup = async (req, res) => {
   const { userId } = req.params;
@@ -41,11 +41,18 @@ export const createGroup = async (req, res) => {
 };
 
 export const addContactToGroup = async (req, res) => {
-  const { userId, groupId } = req.params;
-  const { contact } = req.body;
+  const { userId, phonebookId, contactId, groupId } = req.params;
+  // const { contact } = req.body;
 
   try {
     const userGroups = await Groups.findOne({ user: userId });
+    const phonebook = await Phonebook.findById(phonebookId);
+    if (!phonebook) {
+      return res
+        .status(404)
+        .json({ status: false, message: "Contact not found" });
+    }
+
     if (!userGroups) {
       return res
         .status(404)
@@ -60,6 +67,15 @@ export const addContactToGroup = async (req, res) => {
         status: false,
         message: "Group not found",
       });
+    }
+
+    const contact = phonebook.contacts.filter(
+      (contact) => contact._id.toString() === contactId
+    );
+    if (!contact) {
+      return res
+        .status(404)
+        .json({ status: false, message: "Contact not found" });
     }
     group.contacts.push(contact);
     await userGroups.save();

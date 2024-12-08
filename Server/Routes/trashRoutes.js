@@ -10,7 +10,7 @@ import { protectRoute } from "../Middlewares/authMiddleware.js";
 const router = express.Router();
 
 router.get("/all/:trashId", protectRoute, getTrash);
-router.post("/add/:trashId/:phonebookId", protectRoute, addContact);
+router.post("/add/:trashId/:phonebookId/:contactId", protectRoute, addContact);
 router.delete(
   "/remove/:trashId/:contactId/:phonebookId",
   protectRoute,
