@@ -3,10 +3,84 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { cn } from "@/lib/utils";
 import { GoogleAuthButton } from "./GoogleAuthButton";
-import { NavLink } from "react-router-dom";
+import { login, register } from "@/lib/useApiHandler";
+import { toast } from "sonner";
+import { setUser } from "@/lib/store";
+import { useNavigate } from "react-router-dom";
+// import { NavLink } from "react-router-dom";
 
 export const AuthForm = () => {
+  const navigate = useNavigate();
   const [authType, setAuthType] = useState("login");
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (authType === "signup") {
+      const signupData = {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+      };
+
+      const signUpResponse = await register(signupData);
+      if (signUpResponse.error) {
+        console.log(signUpResponse.message);
+        toast.error("Failed to SignUp", {
+          description: `${signUpResponse.message}`,
+        });
+        setFormData({
+          name: "",
+          email: "",
+          password: "",
+        });
+      } else {
+        setUser(signUpResponse.token, signUpResponse.user);
+        toast.success(`${signUpResponse.message}`);
+        setFormData({
+          name: "",
+          email: "",
+          password: "",
+        });
+        navigate("/dashboard");
+      }
+    } else {
+      const loginData = {
+        email: formData.email,
+        password: formData.password,
+      };
+      const loginResponse = await login(loginData);
+      if (loginResponse.error) {
+        console.log(loginResponse.message);
+        toast.error("Failed to SignUp", {
+          description: `${loginResponse.message}`,
+        });
+        setFormData({
+          name: "",
+          email: "",
+          password: "",
+        });
+      } else {
+        setUser(loginResponse.token, loginResponse.user);
+        toast.success(`${loginResponse.message}`);
+        setFormData({
+          name: "",
+          email: "",
+          password: "",
+        });
+        navigate("/dashboard");
+      }
+    }
+  };
   return (
     <div className="bg-white p-4 shadow-xl rounded-md flex flex-col items-center w-full">
       <h1 className="text-3xl text-center font-semibold text-primary mt-6">
@@ -18,45 +92,47 @@ export const AuthForm = () => {
           : "Let's get you started by Signing Up"}
       </p>
 
-      <form className="w-full px-4 mt-2 my-2">
-        <div
-          className={cn(
-            "group relative mb-4",
-            authType === "login" ? "hidden" : "block"
-          )}
-        >
-          <label
-            htmlFor="name"
-            className="absolute start-1 top-0 z-10 block -translate-y-1/2 bg-background px-2 text-sm  text-medium group-has-[:disabled]:opacity-50"
-          >
-            Name
-          </label>
-          <Input className="h-12 w-full" type="text" />
+      <form className="w-full px-4 mt-2 my-2" onSubmit={handleSubmit}>
+        <div className={cn(" mb-4", authType === "login" ? "hidden" : "block")}>
+          <Input
+            placeholder="Your Name"
+            className="h-12 w-full"
+            type="text"
+            required={authType !== "login"}
+            value={formData.name}
+            name="name"
+            onChange={handleChange}
+          />
         </div>
 
-        <div className="group relative">
-          <label
-            htmlFor="email"
-            className="absolute start-1 top-0 z-10 block -translate-y-1/2 bg-background px-2 text-sm  text-medium group-has-[:disabled]:opacity-50"
-          >
-            Email
-          </label>
-          <Input className="h-12 w-full" type="email" />
-        </div>
+        <Input
+          placeholder="Your Email"
+          className="h-12 w-full"
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
 
         <div className="group relative mt-4">
-          <label
-            htmlFor="password"
-            className="absolute start-1 top-0 z-10 block -translate-y-1/2 bg-background px-2 text-sm  text-medium group-has-[:disabled]:opacity-50"
-          >
-            Password
-          </label>
-          <Input className="h-12 w-full" type="password" />
+          <Input
+            placeholder="Your Password"
+            className="h-12 w-full"
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
         </div>
 
-        <NavLink to={"/dashboard"}>
-          <Button className="w-full mt-3 py-6 text-md">Continue</Button>
-        </NavLink>
+        <Button className="w-full mt-3 py-6 text-md" type="submit">
+          Continue
+        </Button>
+
+        {/* <NavLink to={"/dashboard"}>
+        </NavLink> */}
 
         <p className="text-sm text-center mt-4">
           {authType === "login"

@@ -39,7 +39,7 @@ export function DashboardLinks() {
           to={link.href}
           className={cn(
             location.pathname === link.href
-              ? "text-white bg-primary/80 "
+              ? "text-primary bg-primary/10 "
               : "text-muted-foreground hover:text-slate-900 hover:bg-slate-100",
             "flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-slate-900"
           )}

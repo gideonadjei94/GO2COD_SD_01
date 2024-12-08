@@ -16,10 +16,17 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/Components/ui/sheet";
+import { setUser } from "@/lib/store";
 import { LogOut, MenuIcon, PhoneCall, Settings, User2 } from "lucide-react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
+  const navigate = useNavigate();
+
+  const handleLogOut = () => {
+    setUser("", {});
+    navigate("/");
+  };
   return (
     <>
       <div className="min-h-screen w-full grid md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
@@ -100,7 +107,7 @@ export default function Dashboard() {
                         <Settings className="mr-2" /> Settings
                       </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleLogOut}>
                       <Link to="" className="flex items-center text-red-500">
                         <LogOut className="mr-2" /> Log Out
                       </Link>

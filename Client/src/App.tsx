@@ -1,14 +1,23 @@
-import { Route, Routes, useLocation } from "react-router-dom";
+import {
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import LandingPage from "./Screens/LandingPage";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import Dashboard from "./Screens/Dashboard/_layout";
 import Contacts from "./Screens/Dashboard/Contacts";
 import Groups from "./Screens/Dashboard/Groups";
 import Favorites from "./Screens/Dashboard/Favorites";
 import Trash from "./Screens/Dashboard/Trash";
+import { getUser } from "./lib/store";
+import { Toaster } from "./Components/ui/sonner";
 
 function App() {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const routeTitles: { [key: string]: string } = {
     "/": "Auth | Contacts Box",
@@ -19,8 +28,19 @@ function App() {
   };
 
   useEffect(() => {
+    const checkUser = async () => {
+      const user = getUser();
+      if (!user) {
+        navigate("/");
+      }
+    };
+
+    checkUser();
+  }, []);
+
+  useEffect(() => {
     document.title = routeTitles[location.pathname] || "Contacts Box";
-  }, [location]);
+  }, [location.pathname]);
 
   return (
     <div>
@@ -33,6 +53,8 @@ function App() {
           <Route path="trash" element={<Trash />} />
         </Route>
       </Routes>
+
+      <Toaster richColors closeButton />
     </div>
   );
 }
