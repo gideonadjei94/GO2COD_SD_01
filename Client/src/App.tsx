@@ -1,12 +1,6 @@
-import {
-  Navigate,
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import LandingPage from "./Screens/LandingPage";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import Dashboard from "./Screens/Dashboard/_layout";
 import Contacts from "./Screens/Dashboard/Contacts";
 import Groups from "./Screens/Dashboard/Groups";
