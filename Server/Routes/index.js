@@ -13,5 +13,5 @@ router.use("/user/oauth", oauthRoutes);
 router.use("/phonebook", contactRoutes);
 router.use("/user/favorites", favoriteRoutes);
 router.use("/user/trash", trashRoutes);
-router.use("/user/group", groupRoutes);
+router.use("/user/groups", groupRoutes);
 export default router;
