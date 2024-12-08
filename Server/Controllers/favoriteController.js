@@ -2,28 +2,14 @@ import Favorites from "../Models/Favorites.js";
 import Phonebook from "../Models/PhoneBook.js";
 
 export const addToFavorite = async (req, res) => {
-  const { favoritesId, contactId, phonebookId } = req.params;
+  const { favoritesId } = req.params;
+  const { contact } = req.body;
   try {
     const favorite = await Favorites.findById(favoritesId);
-    const phonebook = await Phonebook.findById(phonebookId);
     if (!favorite) {
       return res
         .status(404)
         .json({ status: false, message: "Favorite not found" });
-    }
-    if (!phonebook) {
-      return res
-        .status(404)
-        .json({ status: false, message: "Phonebook not found" });
-    }
-
-    const contact = phonebook.contacts.filter(
-      (contact) => contact._id.toString() === contactId
-    );
-    if (!contact) {
-      return res
-        .status(404)
-        .json({ status: false, message: "Contact not found" });
     }
 
     const contactExist = favorite.contacts.some(

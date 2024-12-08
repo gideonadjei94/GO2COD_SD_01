@@ -20,7 +20,8 @@ export const getTrash = async (req, res) => {
 };
 
 export const addContact = async (req, res) => {
-  const { trashId, phonebookId, contactId } = req.params;
+  const { trashId, phonebookId } = req.params;
+  const { contact } = req.body;
   const trash = await Trash.findById(trashId);
   const phonebook = await Phonebook.findById(phonebookId);
   if (!trash) {
@@ -30,15 +31,6 @@ export const addContact = async (req, res) => {
     return res
       .status(404)
       .json({ status: false, message: "User phonebook  not found" });
-  }
-
-  const contact = phonebook.contacts.filter(
-    (contact) => contact._id.toString() === contactId
-  );
-  if (!contact) {
-    return res
-      .status(404)
-      .json({ status: false, message: "Contact  not found" });
   }
 
   trash.contacts.push(contact);
@@ -54,8 +46,9 @@ export const addContact = async (req, res) => {
   });
 };
 
-export const removeContact = async (req, res) => {
-  const { trashId, contactId, phonebookId } = req.params;
+export const restoreContact = async (req, res) => {
+  const { trashId, phonebookId } = req.params;
+  const { contact } = req.body;
 
   try {
     const trash = await Trash.findById(trashId);
@@ -68,12 +61,7 @@ export const removeContact = async (req, res) => {
       }
     }
 
-    const contact = trash.contacts.filter(
-      (c) => c._id.toString() === contactId
-    );
-    trash.contacts = trash.contacts.filter(
-      (c) => c._id.toString() !== contactId
-    );
+    trash.contacts = trash.contacts.filter((c) => c.number !== contact.number);
     await trash.save();
 
     phonebook.contacts.push(contact);
@@ -81,6 +69,7 @@ export const removeContact = async (req, res) => {
     return res.status(200).json({
       status: true,
       message: "Contact successfully removed from trash",
+      trash,
     });
   } catch (error) {
     return res.status(500).json({

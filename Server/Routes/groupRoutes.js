@@ -12,11 +12,7 @@ import { protectRoute } from "../Middlewares/authMiddleware.js";
 const router = express.Router();
 
 router.post("/create/:userId", protectRoute, createGroup);
-router.post(
-  "/add/:userId/:phonebookId/:contactId/:groupId",
-  protectRoute,
-  addContactToGroup
-);
+router.post("/add/:userId/:groupId", protectRoute, addContactToGroup);
 router.get("/all/:userId", protectRoute, getUserGroups);
 router.get("/group/:userId/:groupId", protectRoute, getGroup);
 router.delete(

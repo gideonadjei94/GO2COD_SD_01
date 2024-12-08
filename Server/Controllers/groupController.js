@@ -41,17 +41,11 @@ export const createGroup = async (req, res) => {
 };
 
 export const addContactToGroup = async (req, res) => {
-  const { userId, phonebookId, contactId, groupId } = req.params;
-  // const { contact } = req.body;
+  const { userId, groupId } = req.params;
+  const { contact } = req.body;
 
   try {
     const userGroups = await Groups.findOne({ user: userId });
-    const phonebook = await Phonebook.findById(phonebookId);
-    if (!phonebook) {
-      return res
-        .status(404)
-        .json({ status: false, message: "Contact not found" });
-    }
 
     if (!userGroups) {
       return res
@@ -69,14 +63,6 @@ export const addContactToGroup = async (req, res) => {
       });
     }
 
-    const contact = phonebook.contacts.filter(
-      (contact) => contact._id.toString() === contactId
-    );
-    if (!contact) {
-      return res
-        .status(404)
-        .json({ status: false, message: "Contact not found" });
-    }
     group.contacts.push(contact);
     await userGroups.save();
 
