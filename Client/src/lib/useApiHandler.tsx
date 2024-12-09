@@ -1,26 +1,11 @@
 import axios from "axios";
-
 import { getToken } from "./store";
+import { isTokenExpired, sessionExpiredDialog } from "./tokenAuth";
 
 const BackendURL = import.meta.env.VITE_BACKEND_URL;
+
 const signupURL = import.meta.env.VITE_SIGNUP_URL;
 const loginURL = import.meta.env.VITE_LOGIN_URL;
-
-export const apiClient = axios.create({
-  baseURL: BackendURL,
-});
-
-apiClient.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response && error.response.status === 401) {
-      localStorage.removeItem("user");
-      localStorage.removeItem("token");
-      window.location.href = "/";
-    }
-    return Promise.reject(error);
-  }
-);
 
 export const register = async (
   data: object,
@@ -60,8 +45,11 @@ export const postWithToken = async (
 ) => {
   const token = getToken();
   const endPoint = `${BackendURL}/${url}`;
+  if (isTokenExpired(token)) {
+    sessionExpiredDialog(token);
+  }
   try {
-    const res = await apiClient.post(endPoint, data, {
+    const res = await axios.post(endPoint, data, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": `${contentType}`,
@@ -82,8 +70,12 @@ export const putWithToken = async (
   const token = getToken();
   const endPoint = `${BackendURL}/${url}`;
 
+  if (isTokenExpired(token)) {
+    sessionExpiredDialog(token);
+  }
+
   try {
-    const res = await apiClient.put(endPoint, JSON.stringify(data), {
+    const res = await axios.put(endPoint, JSON.stringify(data), {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": `${contentType}`,
@@ -98,8 +90,13 @@ export const putWithToken = async (
 
 export const getWithToken = async (url: string) => {
   try {
+    const endPoint = `${BackendURL}/${url}`;
     const token = getToken();
-    const response = await apiClient.get(`${BackendURL}/${url}`, {
+
+    if (isTokenExpired(token)) {
+      sessionExpiredDialog(token);
+    }
+    const response = await axios.get(endPoint, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

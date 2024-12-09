@@ -1,7 +1,7 @@
 import { getAvatarColor, getInitials } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Checkbox } from "./ui/checkbox";
+import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
+import { Checkbox } from "@/Components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,19 +9,21 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-import { Button } from "./ui/button";
+} from "@/Components/ui/dropdown-menu";
+import { Button } from "@/Components/ui/button";
 import {
   ArrowUpDown,
   Copy,
-  Edit2,
   Mail,
   MoreHorizontal,
-  Plus,
   Trash2,
+  Undo2,
 } from "lucide-react";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
-import AddToFavorites from "./ContactActions/AddToFavorites";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/Components/ui/hover-card";
 
 export type Contact = {
   id: string;
@@ -113,7 +115,7 @@ export const contacts: ColumnDef<Contact>[] = [
   {
     id: "actions",
     enableHiding: false,
-    cell: ({ row }) => {
+    cell: () => {
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -128,20 +130,15 @@ export const contacts: ColumnDef<Contact>[] = [
               <Copy className="size-4" />
               Copy Contact
             </DropdownMenuItem>
-
             <DropdownMenuItem>
-              <Edit2 className="size-4" />
-              Edit Contact
+              <Undo2 className="size-4" />
+              Restore Contact
             </DropdownMenuItem>
-            <AddToFavorites
-              name={row.getValue("name")}
-              number={row.getValue("number")}
-              email={row.getValue("email")}
-            />
+
             <DropdownMenuSeparator />
             <DropdownMenuItem className="text-red-500">
               <Trash2 />
-              Move To Trash
+              Delete Contact
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

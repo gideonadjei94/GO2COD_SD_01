@@ -6,8 +6,9 @@ import Contacts from "./Screens/Dashboard/Contacts";
 import Groups from "./Screens/Dashboard/Groups";
 import Favorites from "./Screens/Dashboard/Favorites";
 import Trash from "./Screens/Dashboard/Trash";
-import { getUser } from "./lib/store";
+import { getToken, getUser } from "./lib/store";
 import { Toaster } from "./Components/ui/sonner";
+import { isTokenExpired } from "./lib/tokenAuth";
 
 function App() {
   const location = useLocation();
@@ -15,17 +16,20 @@ function App() {
 
   const routeTitles: { [key: string]: string } = {
     "/": "Auth | Contacts Box",
-    "/dashboard": "Contacts",
-    "/dashboard/groups": "Groups",
-    "/dashboard/starred": "Favorites",
-    "/dashboard/trash": "Trash",
+    "/dashboard": "Contacts |  Contacts Box",
+    "/dashboard/groups": "Groups |  Contacts Box",
+    "/dashboard/starred": "Favorites |  Contacts Box",
+    "/dashboard/trash": "Trash |  Contacts Box",
   };
 
   useEffect(() => {
     const checkUser = async () => {
       const user = getUser();
-      if (!user) {
+      const token = getToken();
+      if (!user || isTokenExpired(token)) {
         navigate("/");
+      } else {
+        navigate("/dashboard");
       }
     };
 

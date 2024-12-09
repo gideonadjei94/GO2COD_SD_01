@@ -57,7 +57,7 @@ export default function Dashboard() {
           <div className="h-20  flex items-center justify-between  px-10 sticky top-0 z-10 backdrop-blur-lg">
             <Input
               placeholder="Search Contact"
-              className="border  w-72 hidden md:block"
+              className="w-72 hidden md:block border-none"
             />
             <div className="flex md:hidden">
               <Sheet>

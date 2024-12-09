@@ -1,7 +1,7 @@
 import { getAvatarColor, getInitials } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Checkbox } from "./ui/checkbox";
+import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
+import { Checkbox } from "@/Components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,19 +9,14 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-import { Button } from "./ui/button";
+} from "@/Components/ui/dropdown-menu";
+import { Button } from "@/Components/ui/button";
+import { ArrowUpDown, Copy, Mail, MoreHorizontal, Undo2 } from "lucide-react";
 import {
-  ArrowUpDown,
-  Copy,
-  Edit2,
-  Mail,
-  MoreHorizontal,
-  Plus,
-  Trash2,
-} from "lucide-react";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
-import AddToFavorites from "./ContactActions/AddToFavorites";
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/Components/ui/hover-card";
 
 export type Contact = {
   id: string;
@@ -113,7 +108,7 @@ export const contacts: ColumnDef<Contact>[] = [
   {
     id: "actions",
     enableHiding: false,
-    cell: ({ row }) => {
+    cell: () => {
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -130,18 +125,8 @@ export const contacts: ColumnDef<Contact>[] = [
             </DropdownMenuItem>
 
             <DropdownMenuItem>
-              <Edit2 className="size-4" />
-              Edit Contact
-            </DropdownMenuItem>
-            <AddToFavorites
-              name={row.getValue("name")}
-              number={row.getValue("number")}
-              email={row.getValue("email")}
-            />
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-red-500">
-              <Trash2 />
-              Move To Trash
+              <Undo2 className="size-4" />
+              Remove From Favorite
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
