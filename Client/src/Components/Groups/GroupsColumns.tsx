@@ -1,7 +1,7 @@
 import { getAvatarColor, getInitials } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Checkbox } from "./ui/checkbox";
+import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
+import { Checkbox } from "@/Components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,14 +9,15 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-import { Button } from "./ui/button";
-import { ArrowUpDown, Copy, Mail, MoreHorizontal } from "lucide-react";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
-import AddToFavorites from "./ContactActions/AddToFavorites";
-import AddToTrash from "./ContactActions/AddToTrash";
-import EditContact from "./ContactActions/EditContact";
-import CopyContact from "./ContactActions/CopyContact";
+} from "@/Components/ui/dropdown-menu";
+import { Button } from "@/Components/ui/button";
+import { ArrowUpDown, Mail, MoreHorizontal, Undo2 } from "lucide-react";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/Components/ui/hover-card";
+import CopyContact from "../ContactActions/CopyContact";
 
 export type Contact = {
   _id: string;
@@ -122,25 +123,10 @@ export const contacts: ColumnDef<Contact>[] = [
 
             <CopyContact contact={row.original} />
 
-            <DropdownMenuItem
-              onClick={(e) => e.stopPropagation()}
-              onKeyDown={(e) => e.stopPropagation()}
-            >
-              <EditContact
-                contactId={row.original._id}
-                name={row.getValue("name")}
-                number={row.getValue("number")}
-                email={row.getValue("email")}
-              />
+            <DropdownMenuItem>
+              <Undo2 className="size-4" />
+              Remove From Favorite
             </DropdownMenuItem>
-
-            <AddToFavorites
-              name={row.getValue("name")}
-              number={row.getValue("number")}
-              email={row.getValue("email")}
-            />
-            <DropdownMenuSeparator />
-            <AddToTrash />
           </DropdownMenuContent>
         </DropdownMenu>
       );

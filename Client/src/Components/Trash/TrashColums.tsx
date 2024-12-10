@@ -11,22 +11,16 @@ import {
   DropdownMenuTrigger,
 } from "@/Components/ui/dropdown-menu";
 import { Button } from "@/Components/ui/button";
-import {
-  ArrowUpDown,
-  Copy,
-  Mail,
-  MoreHorizontal,
-  Trash2,
-  Undo2,
-} from "lucide-react";
+import { ArrowUpDown, Mail, MoreHorizontal, Trash2, Undo2 } from "lucide-react";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from "@/Components/ui/hover-card";
+import CopyContact from "../ContactActions/CopyContact";
 
 export type Contact = {
-  id: string;
+  _id: string;
   name: string;
   number: string;
   email: string;
@@ -115,7 +109,7 @@ export const contacts: ColumnDef<Contact>[] = [
   {
     id: "actions",
     enableHiding: false,
-    cell: () => {
+    cell: ({ row }) => {
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -126,10 +120,8 @@ export const contacts: ColumnDef<Contact>[] = [
           <DropdownMenuContent align="end" className=" gap-y-2">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <Copy className="size-4" />
-              Copy Contact
-            </DropdownMenuItem>
+
+            <CopyContact contact={row.original} />
             <DropdownMenuItem>
               <Undo2 className="size-4" />
               Restore Contact

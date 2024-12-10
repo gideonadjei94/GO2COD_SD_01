@@ -8,7 +8,7 @@ import Favorites from "./Screens/Dashboard/Favorites";
 import Trash from "./Screens/Dashboard/Trash";
 import { getToken, getUser } from "./lib/store";
 import { Toaster } from "./Components/ui/sonner";
-import { isTokenExpired } from "./lib/tokenAuth";
+import { isTokenExpired, sessionExpiredDialog } from "./lib/tokenAuth";
 
 function App() {
   const location = useLocation();
@@ -27,7 +27,7 @@ function App() {
       const user = getUser();
       const token = getToken();
       if (!user || isTokenExpired(token)) {
-        navigate("/");
+        sessionExpiredDialog(token);
       } else {
         navigate("/dashboard");
       }

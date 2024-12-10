@@ -16,12 +16,15 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/Components/ui/sheet";
-import { setUser } from "@/lib/store";
+import { getUser, setUser } from "@/lib/store";
+import { getAvatarColor, getInitials } from "@/lib/utils";
 import { LogOut, MenuIcon, PhoneCall, Settings, User2 } from "lucide-react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const user = getUser();
+  const userName = getInitials(`${user.name}`);
 
   const handleLogOut = () => {
     setUser("", {});
@@ -75,21 +78,14 @@ export default function Dashboard() {
               </Sheet>
             </div>
             <div className="flex items-center">
-              {/* <div>
-              <Bell className="mr-4 relative" />
-              <Badge
-                variant="destructive"
-                className="absolute top-4 text-xs size-5 flex items-center justify-center right-[88px]"
-              >
-                5
-              </Badge>
-            </div> */}
               <DropdownMenu>
                 <DropdownMenuTrigger>
                   <Avatar>
                     <AvatarImage src="" />
-                    <AvatarFallback className="bg-primary/10 font-medium">
-                      AD
+                    <AvatarFallback
+                      className={`${getAvatarColor(userName)} font-medium`}
+                    >
+                      {userName}
                     </AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
