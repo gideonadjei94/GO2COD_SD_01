@@ -3,7 +3,7 @@ import { getUser } from "@/lib/store";
 import { putWithToken } from "@/lib/useApiHandler";
 import { toast } from "sonner";
 import { useState } from "react";
-import { DropdownMenuItem } from "../ui/dropdown-menu";
+
 import {
   Dialog,
   DialogContent,
@@ -15,6 +15,7 @@ import {
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
+import SubmitButton from "../SubmitButton";
 
 interface editProps {
   contactId: string;
@@ -30,6 +31,7 @@ export default function EditContact({
   name,
 }: editProps) {
   const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: name || "",
     number: number || "",
@@ -44,6 +46,7 @@ export default function EditContact({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const user = getUser();
+    setIsLoading(true);
     const data = {
       name: formData.name,
       number: formData.number,
@@ -141,9 +144,11 @@ export default function EditContact({
                 Cancel
               </Button>
 
-              <Button type="submit" className="bg-slate-900 text-white px-7">
-                Save Changes
-              </Button>
+              <SubmitButton
+                text="Save Changes"
+                isLoading={isLoading}
+                classname="bg-slate-900 text-white px-7"
+              />
             </div>
           </form>
         </DialogContent>

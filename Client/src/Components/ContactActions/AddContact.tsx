@@ -14,9 +14,11 @@ import { useState } from "react";
 import { postWithToken } from "@/lib/useApiHandler";
 import { getUser } from "@/lib/store";
 import { toast } from "sonner";
+import SubmitButton from "../SubmitButton";
 
 export function AddContact() {
   const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     number: "",
@@ -31,6 +33,7 @@ export function AddContact() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const user = getUser();
+    setIsLoading(true);
     const res = await postWithToken(
       `api/v1/phonebook/add/${user.phonebook_id}`,
       formData
@@ -117,9 +120,11 @@ export function AddContact() {
               Cancel
             </Button>
 
-            <Button type="submit" className="bg-slate-900 text-white px-7">
-              Done
-            </Button>
+            <SubmitButton
+              isLoading={isLoading}
+              text="Done"
+              classname="text-white bg-slate-900 px-7"
+            />
           </div>
         </form>
       </DialogContent>

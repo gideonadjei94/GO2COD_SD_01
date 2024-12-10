@@ -7,11 +7,14 @@ import { login, register } from "@/lib/useApiHandler";
 import { toast } from "sonner";
 import { setUser } from "@/lib/store";
 import { useNavigate } from "react-router-dom";
+
+import SubmitButton from "./SubmitButton";
 // import { NavLink } from "react-router-dom";
 
 export const AuthForm = () => {
   const navigate = useNavigate();
   const [authType, setAuthType] = useState("login");
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -32,53 +35,32 @@ export const AuthForm = () => {
         password: formData.password,
       };
 
+      setIsLoading(true);
       const signUpResponse = await register(signupData);
-      if (signUpResponse.error) {
-        console.log(signUpResponse.message);
-        toast.error("Failed to SignUp", {
-          description: `${signUpResponse.message}`,
-        });
-        setFormData({
-          name: "",
-          email: "",
-          password: "",
-        });
-      } else {
-        setUser(signUpResponse.token, signUpResponse.user);
-        toast.success(`${signUpResponse.message}`);
-        setFormData({
-          name: "",
-          email: "",
-          password: "",
-        });
-        navigate("/dashboard");
-      }
+      setUser(signUpResponse.token, signUpResponse.user);
+      toast.success(`${signUpResponse.message}`);
+      setFormData({
+        name: "",
+        email: "",
+        password: "",
+      });
+      navigate("/dashboard");
     } else {
       const loginData = {
         email: formData.email,
         password: formData.password,
       };
+      setIsLoading(true);
       const loginResponse = await login(loginData);
-      if (loginResponse.error) {
-        console.log(loginResponse.message);
-        toast.error("Failed to SignUp", {
-          description: `${loginResponse.message}`,
-        });
-        setFormData({
-          name: "",
-          email: "",
-          password: "",
-        });
-      } else {
-        setUser(loginResponse.token, loginResponse.user);
-        toast.success(`${loginResponse.message}`);
-        setFormData({
-          name: "",
-          email: "",
-          password: "",
-        });
-        navigate("/dashboard");
-      }
+
+      setUser(loginResponse.token, loginResponse.user);
+      toast.success(`${loginResponse.message}`);
+      setFormData({
+        name: "",
+        email: "",
+        password: "",
+      });
+      navigate("/dashboard");
     }
   };
   return (
@@ -127,12 +109,11 @@ export const AuthForm = () => {
           />
         </div>
 
-        <Button className="w-full mt-3 py-6 text-md" type="submit">
-          Continue
-        </Button>
-
-        {/* <NavLink to={"/dashboard"}>
-        </NavLink> */}
+        <SubmitButton
+          isLoading={isLoading}
+          classname="mt-4 w-full "
+          text="Continue"
+        />
 
         <p className="text-sm text-center mt-4">
           {authType === "login"
